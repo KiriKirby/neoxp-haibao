@@ -31,6 +31,20 @@ The current macro logic is deterministic but deeply tied to ImageJ command behav
    - runnable Electron + React shell
    - phase navigation and filename preset parser smoke check
 
+## Upstream Baseline
+
+This workspace keeps a copied Fiji baseline for parity reference.
+
+- Fixed historical reference to ignore: `Macrophage Image Four-Factor Analysis_3.0.2.ijm`
+- Latest upstream baseline rule: choose the highest versioned root-level `Macrophage Image Four-Factor Analysis_X.Y.Z.ijm` file, excluding `3.0.2`
+- Local copy directory: `references/fiji-upstream/`
+- Refresh command: `npm run sync:fiji-ref`
+
+After syncing:
+
+- `references/fiji-upstream/LATEST_MACRO.ijm` is the stable alias
+- `references/fiji-upstream/UPSTREAM_VERSION.json` records the copied upstream version and source file
+
 ## Next Build Targets
 
 1. `packages/engine-adapter-fiji`: run existing pipeline in headless mode with structured output.
@@ -48,6 +62,14 @@ This repository is configured for a Zed-first workflow on Windows.
 3. Close the task terminal when you want to stop the full dev session.
 
 ### Main-Process Debugging
+
+Recommended:
+
+1. Press `Ctrl+Shift+D`.
+2. Start `NeoXP: Launch Desktop Main (Built)`.
+3. Set breakpoints in `apps/desktop/src/main/*.ts`.
+
+Attach workflow:
 
 1. Press `Ctrl+Shift+R` and run `NeoXP: Dev Inspect Main`.
 2. Press `Ctrl+Shift+D`.

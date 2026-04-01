@@ -2,6 +2,20 @@
 
 These instructions apply to the `neoxp_haibao` workspace (Electron desktop app).
 
+## Upstream Fiji Baseline Rule
+
+- This workspace is not the source of truth for Fiji macro behavior.
+- The upstream Fiji-script repository root is the parent directory of this workspace.
+- `Macrophage Image Four-Factor Analysis_3.0.2.ijm` is a fixed historical reference and must always be ignored for workspace sync and parity baseline updates.
+- The latest upstream Fiji baseline is defined as the highest versioned root-level file matching `Macrophage Image Four-Factor Analysis_X.Y.Z.ijm`, excluding `3.0.2`.
+- The local copied baseline must live under `references/fiji-upstream/`.
+- Always refresh the local copied baseline by running `npm run sync:fiji-ref` instead of manual copying.
+- Do not manually edit copied `.ijm` files inside `references/fiji-upstream/`.
+- `references/fiji-upstream/LATEST_MACRO.ijm` is the stable alias for tooling and docs.
+- `references/fiji-upstream/UPSTREAM_VERSION.json` is the required metadata source for the last synced upstream file and version.
+- Before changing parser/contracts/workflow/desktop behavior that depends on Fiji semantics, first sync the baseline and then read `references/fiji-upstream/UPSTREAM_VERSION.json`.
+- If the upstream macro version changes in the future, keep using the same rule: choose the highest versioned root-level macro file except `3.0.2`.
+
 ## Product Intent
 
 - This app is a non-linear workbench, not a wizard.

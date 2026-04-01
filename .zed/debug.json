@@ -1,0 +1,44 @@
+[
+  {
+    "label": "NeoXP: Attach Electron Main (9229)",
+    "adapter": "JavaScript",
+    "type": "node",
+    "request": "attach",
+    "attachSimplePort": 9229,
+    "cwd": "$ZED_WORKTREE_ROOT/apps/desktop",
+    "sourceMaps": true,
+    "skipFiles": [
+      "<node_internals>/**",
+      "$ZED_WORKTREE_ROOT/node_modules/**"
+    ]
+  },
+  {
+    "label": "NeoXP: Launch Desktop Main (Built)",
+    "adapter": "JavaScript",
+    "type": "node",
+    "request": "launch",
+    "build": "NeoXP: Build Debug Desktop",
+    "cwd": "$ZED_WORKTREE_ROOT/apps/desktop",
+    "runtimeExecutable": "$ZED_WORKTREE_ROOT/node_modules/.bin/electron.cmd",
+    "args": [
+      "$ZED_WORKTREE_ROOT/apps/desktop/dist-electron/main.cjs"
+    ],
+    "console": "integratedTerminal",
+    "sourceMaps": true,
+    "skipFiles": [
+      "<node_internals>/**",
+      "$ZED_WORKTREE_ROOT/node_modules/**"
+    ]
+  },
+  {
+    "label": "NeoXP: Launch Renderer In Chrome",
+    "adapter": "JavaScript",
+    "type": "chrome",
+    "request": "launch",
+    "url": "http://127.0.0.1:5173",
+    "webRoot": "$ZED_WORKTREE_ROOT/apps/desktop/src",
+    "skipFiles": [
+      "<node_internals>/**"
+    ]
+  }
+]

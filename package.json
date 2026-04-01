@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "description": "Desktop workflow and analysis engine migration for macrophage phagocytosis analysis.",
-  "packageManager": "pnpm@10.0.0",
+  "packageManager": "npm@11.12.1",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -12,6 +12,7 @@
     "typescript": "^5.8.2"
   },
   "scripts": {
+    "sync:fiji-ref": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/sync-fiji-latest.ps1",
     "dev:ps": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/dev.ps1",
     "dev:ps:fast": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/dev.ps1 -SkipInstall",
     "dev:ps:inspect-main": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/dev.ps1 -SkipInstall -InspectMain",
@@ -19,6 +20,7 @@
     "typecheck:packages": "npm run typecheck --workspace=@neoxp/contracts && npm run typecheck --workspace=@neoxp/parser && npm run typecheck --workspace=@neoxp/workflow",
     "dev": "npm run build:packages && npm run dev --workspace=@neoxp/desktop",
     "dev:inspect-main": "npm run build:packages && npm run dev:inspect-main --workspace=@neoxp/desktop",
+    "build:debug": "npm run build:packages && npm run build:debug --workspace=@neoxp/desktop",
     "typecheck": "npm run typecheck:packages && npm run typecheck --workspace=@neoxp/desktop",
     "build": "npm run build:packages && npm run build --workspace=@neoxp/desktop",
     "test": "npm run test --workspaces --if-present"
