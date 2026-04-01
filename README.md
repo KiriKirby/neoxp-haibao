@@ -1,133 +1,129 @@
-# neoxp_haibao
+# NeoXP Haibao
 
-Standalone Electron desktop project for the Haibao workflow.
+NeoXP Haibao is an Electron desktop application for turning the Fiji macrophage analysis workflow into a desktop workbench.
 
-## Repository Relationship
+This repository is for the desktop product: UI, workflow orchestration, parsing rules, shared contracts, and future native compute modules. The Fiji macro itself still lives in the separate source-of-truth repository: `../Macrophage-4-Analysis`.
 
-- Fiji macro source of truth: `../Macrophage-4-Analysis`
-- Desktop/UI product repository: this repository
-- Fixed historical macro to ignore: `Macrophage Image Four-Factor Analysis_3.0.2.ijm`
-- Active parity baseline: the highest versioned root-level `Macrophage Image Four-Factor Analysis_X.Y.Z.ijm` file from the Fiji repository, excluding `3.0.2`
+## What This Repository Contains
 
-This repository is allowed to implement UI, workflow orchestration, parser/contracts logic, and future native engines. It is not the source of truth for Fiji macro behavior. Macro semantics must be copied from the Fiji repository baseline before behavior-sensitive work.
+- `apps/desktop`: Electron + React desktop app
+- `packages/contracts`: shared types, error codes, and parameter-spec definitions
+- `packages/parser`: filename and time parsing logic aligned with the Fiji workflow
+- `packages/workflow`: phase model and workflow state logic
+- `references/fiji-upstream`: copied Fiji macro baseline used for parity tracking
+- `docs`: migration notes and architecture planning
 
-## Goal
+## Relationship to the Fiji Repository
 
-Build a non-linear desktop workflow while preserving scientific output consistency for phagocytosis analysis.
+The Fiji repository is the behavioral source of truth.
 
-## Recommended Strategy
+This repository keeps a copied macro baseline under `references/fiji-upstream/` so desktop work can stay aligned with the current Fiji implementation.
 
-1. Keep a copied Fiji baseline for parity checks.
-2. Build the desktop workflow and shared contracts around that baseline.
-3. Replace Fiji-dependent compute modules only after metric-level regression passes.
+Sync rules:
 
-## Why This Strategy
+- Ignore `Macrophage Image Four-Factor Analysis_3.0.2.ijm`
+- Treat the highest versioned root-level `Macrophage Image Four-Factor Analysis_X.Y.Z.ijm` in `../Macrophage-4-Analysis` as the active baseline
+- Never edit copied macro files inside `references/fiji-upstream/` manually
 
-The current macro logic is deterministic but deeply tied to Fiji/ImageJ behavior. Replacing all image algorithms in one pass is high-risk and likely to drift from the current results.
+Useful commands:
 
-## Current Scope in This Folder
+- Manual sync: `npm run sync:fiji-ref`
+- Manual sync script: `./sync-fiji-ref.ps1`
+- Normal dev/build commands also run an optional pre-sync first
 
-1. `docs/`
-   - Fiji algorithm audit
-   - migration architecture and sequencing
-2. `packages/contracts`
-   - shared model definitions (error codes, phase keys, param-spec keys)
-3. `packages/parser`
-   - filename/time parsing behavior aligned with macro presets
-4. `packages/workflow`
-   - phase model and non-linear state machine baseline
-5. `apps/desktop`
-   - runnable Electron + React shell
-   - phase navigation and filename preset parser smoke check
-6. `references/fiji-upstream/`
-   - copied Fiji macro baseline and sync metadata
+Files created by sync:
 
-## Fiji Baseline Sync
+- `references/fiji-upstream/LATEST_MACRO.ijm`
+- `references/fiji-upstream/Macrophage Image Four-Factor Analysis_X.Y.Z.ijm`
+- `references/fiji-upstream/UPSTREAM_VERSION.json`
 
-This repository keeps a copied Fiji baseline under `references/fiji-upstream/`.
+If you change behavior that depends on Fiji semantics, sync first, then read `UPSTREAM_VERSION.json` before you start editing code.
 
-Files:
+## Current Project Status
 
-- `references/fiji-upstream/LATEST_MACRO.ijm`: stable alias for tooling and docs
-- `references/fiji-upstream/Macrophage Image Four-Factor Analysis_X.Y.Z.ijm`: copied upstream macro with original filename
-- `references/fiji-upstream/UPSTREAM_VERSION.json`: last synced source path, filename, version, and timestamp
+The repository is currently strongest in these areas:
 
-Rules:
+- Desktop shell and project structure
+- Zed-based local development workflow
+- Parser/contracts/workflow foundations
+- Fiji baseline sync and parity reference handling
 
-1. Never edit copied `.ijm` files under `references/fiji-upstream/` manually.
-2. Always ignore `Macrophage Image Four-Factor Analysis_3.0.2.ijm`.
-3. Treat the highest versioned root-level `Macrophage Image Four-Factor Analysis_X.Y.Z.ijm` in the Fiji repository as the latest baseline.
-4. Refresh the copied baseline with `npm run sync:fiji-ref`.
+The repository is still early in these areas:
 
-Commands:
+- Full execution engine parity with Fiji
+- End-to-end scientific output validation
+- Production packaging and release flow
 
-- Strict sync: `npm run sync:fiji-ref`
-- Alias: `npm run refresh:fiji-baseline`
-- Automatic local pre-sync: `npm run dev`, `npm run dev:inspect-main`, `npm run build`, `npm run build:debug`, `npm run typecheck`, and `npm run test`
+## Local Development
 
-Automatic local pre-sync uses the optional mode of `scripts/sync-fiji-latest.ps1`. If the sibling Fiji repository is missing, the command prints a skip message and continues. Use the strict sync command when you need to confirm that this repository is aligned with the latest Fiji macro before behavior-sensitive work.
+Requirements:
 
-Recommended sequence before parser/contracts/workflow changes:
+- Windows
+- Node.js 22
+- npm
+- Zed
 
-1. Pull the latest `Macrophage-4-Analysis` repository.
-2. Run `npm run sync:fiji-ref` in this repository.
-3. Read `references/fiji-upstream/UPSTREAM_VERSION.json`.
-4. Make the behavior change.
-5. Re-run `npm run build` or `npm run typecheck`.
+Install dependencies:
 
-## Next Build Targets
+```powershell
+npm install
+```
 
-1. `packages/engine-adapter-fiji`: run the existing pipeline in headless mode with structured output.
-2. `packages/engine-native`: native implementations of thresholding, morphology, and particle counting.
-3. Extend `apps/desktop` with persisted project state, parameter editing, and batch execution views.
+Start development:
+
+```powershell
+npm run dev
+```
+
+Build the desktop app:
+
+```powershell
+npm run build
+```
+
+Run type checks:
+
+```powershell
+npm run typecheck
+```
+
+Run tests:
+
+```powershell
+npm run test
+```
 
 ## Zed Workflow
 
-This repository is configured for a Zed-first workflow on Windows.
+This repository is configured primarily for Zed on Windows.
 
-### Daily Run
+Common tasks:
 
-1. Open the repository root in Zed.
-2. Press `Ctrl+Shift+R` and run `NeoXP: Dev`.
-3. Close the task terminal when you want to stop the full dev session.
-
-### Main-Process Debugging
-
-Recommended:
-
-1. Press `Ctrl+Shift+D`.
-2. Start `NeoXP: Launch Desktop Main (Built)`.
-3. Set breakpoints in `apps/desktop/src/main/*.ts`.
-
-Attach workflow:
-
-1. Press `Ctrl+Shift+R` and run `NeoXP: Dev Inspect Main`.
-2. Press `Ctrl+Shift+D`.
-3. Start `NeoXP: Attach Electron Main (9229)`.
-4. Set breakpoints in `apps/desktop/src/main/*.ts`.
-
-### Renderer Debugging
-
-1. Start `NeoXP: Dev`.
-2. Press `Ctrl+Shift+D`.
-3. Start `NeoXP: Launch Renderer In Chrome`.
-
-### Common Tasks
-
-- `NeoXP: Install`
+- `NeoXP: Dev`
+- `NeoXP: Dev Inspect Main`
 - `NeoXP: Build`
 - `NeoXP: Typecheck`
 - `NeoXP: Test`
 - `NeoXP: Preview`
 
-Project-local Zed configuration lives in `.zed/tasks.json` and `.zed/debug.json`.
+Common debug entries:
+
+- `NeoXP: Launch Desktop Main (Built)`
+- `NeoXP: Attach Electron Main (9229)`
+- `NeoXP: Launch Renderer In Chrome`
+
+Project-local Zed configuration is stored in `.zed/tasks.json` and `.zed/debug.json`.
+
+## Direction
+
+The long-term goal is a desktop workbench that can replace the macro-driven workflow without changing scientific meaning.
+
+The practical approach is incremental:
+
+1. Keep the Fiji baseline visible and current.
+2. Move workflow and validation logic into shared TypeScript modules.
+3. Replace Fiji-dependent execution pieces only after parity checks are in place.
 
 ## License
 
 This repository is licensed under GPL-3.0-or-later.
-
-Why this license:
-
-- Strong copyleft keeps modified and redistributed desktop versions open.
-- Downstream forks that distribute changes must provide source under the same license family.
-- The copied Fiji baseline remains a parity reference inside this repository; its upstream macro source remains available from the Fiji repository.

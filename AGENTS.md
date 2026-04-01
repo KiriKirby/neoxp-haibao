@@ -1,6 +1,13 @@
 # AGENTS
 
-These instructions apply to the `neoxp_haibao` workspace (Electron desktop app).
+These instructions apply to the 
+eoxp_haibao workspace (Electron desktop app).
+
+## Documentation Language Rule
+
+- README.md is English-only.
+- Do not add translated README variants in this repository unless the user explicitly asks for them.
+- New narrative documentation should default to clear, plain English.
 
 ## Upstream Fiji Baseline Rule
 
