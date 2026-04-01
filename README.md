@@ -121,3 +121,13 @@ Attach workflow:
 - `NeoXP: Preview`
 
 Project-local Zed configuration lives in `.zed/tasks.json` and `.zed/debug.json`.
+
+## License
+
+This repository is licensed under GPL-3.0-or-later.
+
+Why this license:
+
+- Strong copyleft keeps modified and redistributed desktop versions open.
+- Downstream forks that distribute changes must provide source under the same license family.
+- The copied Fiji baseline remains a parity reference inside this repository; its upstream macro source remains available from the Fiji repository.

@@ -1,0 +1,3 @@
+references/fiji-upstream/*.ijm linguist-vendored
+references/fiji-upstream/UPSTREAM_VERSION.json linguist-generated
+sample.png linguist-generated
