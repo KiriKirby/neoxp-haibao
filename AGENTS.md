@@ -5,7 +5,7 @@ These instructions apply to the `neoxp_haibao` workspace (Electron desktop app).
 ## Upstream Fiji Baseline Rule
 
 - This workspace is not the source of truth for Fiji macro behavior.
-- The upstream Fiji-script repository root is the parent directory of this workspace.
+- The upstream Fiji-script repository is expected to live next to this repository as `../Macrophage-4-Analysis`.
 - `Macrophage Image Four-Factor Analysis_3.0.2.ijm` is a fixed historical reference and must always be ignored for workspace sync and parity baseline updates.
 - The latest upstream Fiji baseline is defined as the highest versioned root-level file matching `Macrophage Image Four-Factor Analysis_X.Y.Z.ijm`, excluding `3.0.2`.
 - The local copied baseline must live under `references/fiji-upstream/`.
@@ -14,6 +14,7 @@ These instructions apply to the `neoxp_haibao` workspace (Electron desktop app).
 - `references/fiji-upstream/LATEST_MACRO.ijm` is the stable alias for tooling and docs.
 - `references/fiji-upstream/UPSTREAM_VERSION.json` is the required metadata source for the last synced upstream file and version.
 - Before changing parser/contracts/workflow/desktop behavior that depends on Fiji semantics, first sync the baseline and then read `references/fiji-upstream/UPSTREAM_VERSION.json`.
+- Local workflow scripts `dev`, `dev:inspect-main`, `build`, `build:debug`, `typecheck`, and `test` automatically run an optional pre-sync first. That optional pre-sync may skip when the sibling Fiji repository is not present.
 - If the upstream macro version changes in the future, keep using the same rule: choose the highest versioned root-level macro file except `3.0.2`.
 
 ## Product Intent
@@ -95,7 +96,7 @@ These instructions apply to the `neoxp_haibao` workspace (Electron desktop app).
 ## Theme and Color Baseline
 
 - Pane colorization must be token-driven and scalable:
-  - Each pane root uses `className=\"pane\"` and `data-pane-tone=\"files|settings|logs\"`.
+  - Each pane root uses `className="pane"` and `data-pane-tone="files|settings|logs"`.
   - Pane accent derives from tone and must flow to Fluent tokens (focus stroke, brand stroke/background, hover/pressed states).
   - New controls added inside a pane should inherit pane accent without control-specific hardcoded color classes.
 - Keep visual hierarchy consistent in dark mode:
@@ -147,9 +148,10 @@ These instructions apply to the `neoxp_haibao` workspace (Electron desktop app).
 From `neoxp_haibao`:
 
 1. `npm install`
-2. `npm run typecheck`
-3. `npm run build`
-4. `npm run dev:ps:fast`
+2. `npm run sync:fiji-ref`
+3. `npm run typecheck`
+4. `npm run build`
+5. `npm run dev:ps:fast`
 
 Manual verification checklist:
 

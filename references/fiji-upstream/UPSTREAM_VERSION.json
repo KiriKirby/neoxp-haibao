@@ -3,7 +3,7 @@
     "source_file":  "C:\\Users\\wangsychn\\Documents\\GitHub\\Macrophage-4-Analysis\\Macrophage Image Four-Factor Analysis_4.0.0.ijm",
     "source_name":  "Macrophage Image Four-Factor Analysis_4.0.0.ijm",
     "source_version":  "4.0.0",
-    "copied_at":  "2026-04-02T02:36:38",
+    "copied_at":  "2026-04-02T03:04:50",
     "fixed_reference_ignored":  "Macrophage Image Four-Factor Analysis_3.0.2.ijm",
-    "rule":  "Pick the highest 4.x-or-later versioned macro filename at upstream repo root and copy it here."
+    "rule":  "Pick the highest versioned root-level macro filename at the upstream Fiji repository root, excluding 3.0.2, and copy it here."
 }
